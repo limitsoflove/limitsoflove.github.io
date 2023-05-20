@@ -3,14 +3,203 @@
 
 <head>
     <title>Gas constant with lots of units</title>
+    <script>
+        var numerator_units = "Energy";
+        var energy_units = "J";
+        var pressure_units = "Pa";
+        var volume_units = "m3";
+        var mole_units = "mol";
+        var temp_units = "K";
+        var R = 8.31446261815324;
+
+        const conversionFactors = {
+            /*Energy*/
+            J: 1,
+            cal: 0.2390057361,
+            erg: 1e7,
+            Btu: 0.000947817,
+            kJ: 1e-3,
+            kWh: 0.0000002778,
+            lbfft: 0.7375621493,
+
+            /*Pressure*/
+            Pa: 1,
+            bar: 1e-5,
+            inHg: 0.000295301,
+            mmHg: 0.0075006375541921,
+            kPa: 1e-3,
+            atm: 0.00000986923,
+            psi: 0.0001450377,
+            Torr: 0.0075006168,
+
+            /*Volume*/
+            m3: 1,
+            ft3: 35.31467,
+            L: 1000,
+            cm3: 1000000,
+            mL: 1000000,
+
+            /*Mole*/
+            mol: 1,
+            lbmol: 0.00220462262184878,
+            kmol: 1e-3,
+
+            /*Temperature*/
+            K: 1,
+            R: 1.8
+        }
+
+        function printR() {
+            if (numerator_units == "Energy") {
+                document.getElementById("R").innerHTML = "R = " + R + " " + energy_units + " " + mole_units + " " + temp_units;
+            } else {
+                document.getElementById("R").innerHTML = "R = " + R + " " + pressure_units + " " + volume_units + " " + mole_units + " " + temp_units;
+            }
+
+        }
+
+        function updateR() {
+            R = 8.31446261815324;
+            if (numerator_units == "Energy") {
+                R = R * conversionFactors[energy_units];
+            } else {
+                R = R * conversionFactors[pressure_units] * conversionFactors[volume_units];
+            }
+
+            R = R / (conversionFactors[mole_units] * conversionFactors[temp_units]);
+        }
+    </script>
 </head>
 
 
 <body>
 
     <label for="numerator">Energy or pressure*volume units in numerator?</label>
-    <select name="numerator" id="numerator">
+    <select name="numerator" id="numerator" onchange="getResponseNumerator()">
         <option value="Energy">Energy</option>
         <option value="Pressure*volume">Pressure*volume</option>
     </select>
+
+    <script>
+        function getResponseNumerator(eleme) {
+            var e = document.getElementById("numerator");
+            numerator_units = e.options[e.selectedIndex].value
+            if (numerator_units == "Energy") {
+                document.getElementById("energy-div").style.display = "block";
+                document.getElementById("pressure-div").style.display = "none";
+                document.getElementById("volume-div").style.display = "none";
+            } else {
+                document.getElementById("energy-div").style.display = "none";
+                document.getElementById("pressure-div").style.display = "block";
+                document.getElementById("volume-div").style.display = "block";
+            }
+            updateR()
+            printR()
+        }
+    </script>
+
+    <div style="display:block" id="energy-div">
+        <label for="energy">Energy units?</label>
+        <select name="energy" id="energy" onchange="getResponseEnergy()">
+            <option value="J">J</option>
+            <option value="kJ">kJ</option>
+            <option value="Btu">Btu</option>
+            <option value="cal">cal</option>
+            <option value="erg">erg</option>
+            <option value="kWh">kWh</option>
+            <option value="lbfft">lbf.ft</option>
+        </select>
+    </div>
+
+    <div style="display:none" id="pressure-div">
+        <label for="pressure">Pressure units?</label>
+        <select name="pressure" id="pressure" onchange="getResponsePressure()">
+            <option value="Pa">Pa</option>
+            <option value="kPa">kPa</option>
+            <option value="atm">atm</option>
+            <option value="bar">bar</option>
+            <option value="mmHg">mmHg</option>
+            <option value="inHg">inHg</option>
+            <option value="psi">psi</option>
+            <option value="Torr">Torr</option>
+        </select>
+    </div>
+
+    <div style="display:none" id="volume-div">
+        <label for="volume">Volume units?</label>
+        <select name="volume" id="volume" onchange="getResponseVolume()">
+            <option value="m3">m3</option>
+            <option value="cm3">cm3</option>
+            <option value="ft3">ft3</option>
+            <option value="L">L</option>
+            <option value="mL">mL</option>
+        </select>
+    </div>
+
+    <div style="display:block" id="mole-div">
+        <label for="mole">Mole units?</label>
+        <select name="mole" id="mole" onchange="getResponseMole()">
+            <option value="mol">mol</option>
+            <option value="lbmol">lbmol</option>
+            <option value="kmol">kmol</option>
+        </select>
+    </div>
+
+    <div style="display:block" id="temp-div">
+        <label for="temp">Temperature units?</label>
+        <select name="temp" id="temp" onchange="getResponseTemp()">
+            <option value="K">K</option>
+            <!--<option value="C">ºC</option>
+            <option value="F">ºF</option>-->
+            <option value="R">ºR</option>
+        </select>
+    </div>
+
+
+    <script>
+        function getResponseEnergy(eleme) {
+            var e = document.getElementById("energy");
+            energy_units = e.options[e.selectedIndex].value;
+            updateR()
+            printR()
+        }
+
+        function getResponsePressure(eleme) {
+            var e = document.getElementById("pressure");
+            pressure_units = e.options[e.selectedIndex].value;
+            updateR()
+            printR()
+        }
+
+        function getResponseVolume(eleme) {
+            var e = document.getElementById("volume");
+            volume_units = e.options[e.selectedIndex].value;
+            updateR()
+            printR()
+        }
+
+        function getResponseMole(eleme) {
+            var e = document.getElementById("mole");
+            mole_units = e.options[e.selectedIndex].value;
+            updateR()
+            printR()
+        }
+
+        function getResponseTemp(eleme) {
+            var e = document.getElementById("temp");
+            temp_units = e.options[e.selectedIndex].value;
+            updateR()
+            printR()
+        }
+    </script>
+
+
+    <h1 id="R"></h1>
+
+    <script>
+        updateR()
+        printR()
+    </script>
+
+
 </body>
