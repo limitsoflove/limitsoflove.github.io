@@ -3,7 +3,6 @@
 
 <style>
     label {
-        padding: 20px;
         padding-right: 5px;
     }
     
@@ -30,6 +29,10 @@
         background-color: #f3ffd4;
         border-radius: 50px;
     }
+    /*
+    body {
+        background-image: url('R_bg.jpeg');
+    }*/
     /*Marquee stuff*/
     
     .bounce {
@@ -89,7 +92,7 @@
 </style>
 
 <head>
-    <title>Gas constant with lots of units</title>
+    <title>Gas constant in lots of different units</title>
     <script>
         var numerator_units = "Energy";
         var energy_units = "J";
@@ -161,9 +164,14 @@
 
 <body>
 
-    <div class="bounce">
+    <div class="bounce" id="marquee">
         <p> Gas constant in lots of different units </p>
     </div>
+    <!--
+    <label for="graphic">Graphic deisng is not m ypasions....:(:</label>
+    <input type="checkbox" id="graphic" onclick="graphicdesign()">-->
+
+    <br>
 
     <div class="num">
         <label for="numerator">Energy or pressure*volume units in numerator?</label>
