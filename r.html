@@ -1,6 +1,93 @@
 <!DOCTYPE HTML>
 <html lang="en">
 
+<style>
+    label {
+        padding: 20px;
+        padding-right: 5px;
+    }
+    
+    .num {
+        font-family: 'Comic Sans MS', 'Comic Sans';
+        background-color: #ffd6da;
+        border-radius: 50px;
+        padding: 20px;
+    }
+    
+    .therest {
+        font-family: 'Comic Sans MS', 'Comic Sans';
+        background-color: #ffe4d6;
+        border-radius: 50px;
+        padding: 20px;
+    }
+    
+    h1 {
+        font-family: 'Comic Sans MS', 'Comic Sans';
+        text-align: center;
+    }
+    
+    .result {
+        background-color: #f3ffd4;
+        border-radius: 50px;
+    }
+    /*Marquee stuff*/
+    
+    .bounce {
+        height: 50px;
+        overflow: hidden;
+        position: relative;
+        background: #fefefe;
+        color: #333;
+    }
+    
+    .bounce p {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        font-family: 'Comic Sans MS', 'Comic Sans';
+        line-height: 50px;
+        text-align: center;
+        -moz-transform: translateX(50%);
+        -webkit-transform: translateX(50%);
+        transform: translateX(50%);
+        -moz-animation: bouncing-text 5s linear infinite alternate;
+        -webkit-animation: bouncing-text 5s linear infinite alternate;
+        animation: bouncing-text 10s linear infinite alternate;
+    }
+    
+    @-moz-keyframes bouncing-text {
+        0% {
+            -moz-transform: translateX(50%);
+        }
+        100% {
+            -moz-transform: translateX(-50%);
+        }
+    }
+    
+    @-webkit-keyframes bouncing-text {
+        0% {
+            -webkit-transform: translateX(50%);
+        }
+        100% {
+            -webkit-transform: translateX(-50%);
+        }
+    }
+    
+    @keyframes bouncing-text {
+        0% {
+            -moz-transform: translateX(50%);
+            -webkit-transform: translateX(50%);
+            transform: translateX(50%);
+        }
+        100% {
+            -moz-transform: translateX(-50%);
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+        }
+    }
+</style>
+
 <head>
     <title>Gas constant with lots of units</title>
     <script>
@@ -51,9 +138,9 @@
 
         function printR() {
             if (numerator_units == "Energy") {
-                document.getElementById("R").innerHTML = "R = " + R + " " + energy_units + " " + mole_units + " " + temp_units;
+                document.getElementById("R").innerHTML = "R = " + R + " " + energy_units + " / " + mole_units + " " + temp_units;
             } else {
-                document.getElementById("R").innerHTML = "R = " + R + " " + pressure_units + " " + volume_units + " " + mole_units + " " + temp_units;
+                document.getElementById("R").innerHTML = "R = " + R + " " + pressure_units + " " + volume_units + " / " + mole_units + " " + temp_units;
             }
 
         }
@@ -74,11 +161,18 @@
 
 <body>
 
-    <label for="numerator">Energy or pressure*volume units in numerator?</label>
-    <select name="numerator" id="numerator" onchange="getResponseNumerator()">
-        <option value="Energy">Energy</option>
-        <option value="Pressure*volume">Pressure*volume</option>
-    </select>
+    <div class="bounce">
+        <p> Gas constant in lots of different units </p>
+    </div>
+
+    <div class="num">
+        <label for="numerator">Energy or pressure*volume units in numerator?</label>
+        <select name="numerator" id="numerator" onchange="getResponseNumerator()">
+            <option value="Energy">Energy</option>
+            <option value="Pressure*volume">Pressure*volume</option>
+        </select>
+    </div>
+    <br>
 
     <script>
         function getResponseNumerator(eleme) {
@@ -98,62 +192,65 @@
         }
     </script>
 
-    <div style="display:block" id="energy-div">
-        <label for="energy">Energy units?</label>
-        <select name="energy" id="energy" onchange="getResponseEnergy()">
-            <option value="J">J</option>
-            <option value="kJ">kJ</option>
-            <option value="Btu">Btu</option>
-            <option value="cal">cal</option>
-            <option value="erg">erg</option>
-            <option value="kWh">kWh</option>
-            <option value="lbfft">lbf.ft</option>
-        </select>
+    <div class="therest">
+        <div style="display:block" id="energy-div">
+            <label for="energy">Energy units?</label>
+            <select name="energy" id="energy" onchange="getResponseEnergy()">
+                <option value="J">J</option>
+                <option value="kJ">kJ</option>
+                <option value="Btu">Btu</option>
+                <option value="cal">cal</option>
+                <option value="erg">erg</option>
+                <option value="kWh">kWh</option>
+                <option value="lbfft">lbf.ft</option>
+            </select>
+        </div>
+
+        <div style="display:none" id="pressure-div">
+            <label for="pressure">Pressure units?</label>
+            <select name="pressure" id="pressure" onchange="getResponsePressure()">
+                <option value="Pa">Pa</option>
+                <option value="kPa">kPa</option>
+                <option value="atm">atm</option>
+                <option value="bar">bar</option>
+                <option value="mmHg">mmHg</option>
+                <option value="inHg">inHg</option>
+                <option value="psi">psi</option>
+                <option value="Torr">Torr</option>
+            </select>
+        </div>
+
+        <div style="display:none" id="volume-div">
+            <label for="volume">Volume units?</label>
+            <select name="volume" id="volume" onchange="getResponseVolume()">
+                <option value="m3">m3</option>
+                <option value="cm3">cm3</option>
+                <option value="ft3">ft3</option>
+                <option value="L">L</option>
+                <option value="mL">mL</option>
+            </select>
+        </div>
+
+        <div style="display:block" id="mole-div">
+            <label for="mole">Mole units?</label>
+            <select name="mole" id="mole" onchange="getResponseMole()">
+                <option value="mol">mol</option>
+                <option value="lbmol">lbmol</option>
+                <option value="kmol">kmol</option>
+            </select>
+        </div>
+
+        <div style="display:block" id="temp-div">
+            <label for="temp">Temperature units?</label>
+            <select name="temp" id="temp" onchange="getResponseTemp()">
+                <option value="K">K</option>
+                <!--<option value="C">ºC</option>
+                <option value="F">ºF</option>-->
+                <option value="R">ºR</option>
+            </select>
+        </div>
     </div>
 
-    <div style="display:none" id="pressure-div">
-        <label for="pressure">Pressure units?</label>
-        <select name="pressure" id="pressure" onchange="getResponsePressure()">
-            <option value="Pa">Pa</option>
-            <option value="kPa">kPa</option>
-            <option value="atm">atm</option>
-            <option value="bar">bar</option>
-            <option value="mmHg">mmHg</option>
-            <option value="inHg">inHg</option>
-            <option value="psi">psi</option>
-            <option value="Torr">Torr</option>
-        </select>
-    </div>
-
-    <div style="display:none" id="volume-div">
-        <label for="volume">Volume units?</label>
-        <select name="volume" id="volume" onchange="getResponseVolume()">
-            <option value="m3">m3</option>
-            <option value="cm3">cm3</option>
-            <option value="ft3">ft3</option>
-            <option value="L">L</option>
-            <option value="mL">mL</option>
-        </select>
-    </div>
-
-    <div style="display:block" id="mole-div">
-        <label for="mole">Mole units?</label>
-        <select name="mole" id="mole" onchange="getResponseMole()">
-            <option value="mol">mol</option>
-            <option value="lbmol">lbmol</option>
-            <option value="kmol">kmol</option>
-        </select>
-    </div>
-
-    <div style="display:block" id="temp-div">
-        <label for="temp">Temperature units?</label>
-        <select name="temp" id="temp" onchange="getResponseTemp()">
-            <option value="K">K</option>
-            <!--<option value="C">ºC</option>
-            <option value="F">ºF</option>-->
-            <option value="R">ºR</option>
-        </select>
-    </div>
 
 
     <script>
@@ -193,8 +290,10 @@
         }
     </script>
 
+    <div class="result">
+        <h1 id="R"></h1>
+    </div>
 
-    <h1 id="R"></h1>
 
     <script>
         updateR()
